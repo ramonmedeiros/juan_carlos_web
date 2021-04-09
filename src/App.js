@@ -3,9 +3,9 @@ import { Component, Fragment } from 'react';
 import WebTorrent from 'webtorrent';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Button from '@material-ui/core/Button';
 
-//const TPB = "https://thepiratebay-plus.strem.fun/manifest.json"
-// download files and read it 
+const TPB = "https://thepiratebay-plus.strem.fun/stream/movie/"
 
 class App extends Component {
 
@@ -17,6 +17,7 @@ class App extends Component {
       options: [],
     }
     this.searchTitle = this.searchTitle.bind(this);
+    this.listStreams = this.listStreams.bind(this)
     this.data = []
     this.fetchList()
   }
@@ -34,22 +35,40 @@ class App extends Component {
       });
   }
 
-  componentDidUpdate() {
+  searchJson(title){
+    let results = []
+    for (var i = 0; i < this.data.length; i++) {
+      if (this.data[i]["originalTitle"].includes(title))
+        results.push(this.data[i]);
+    }
+    return results
   }
 
   searchTitle(event) {
     let title = event.target.value
     if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      let results = []
-      for (var i = 0; i < this.data.length; i++) {
-        if (this.data[i]["originalTitle"].includes(title))
-          results.push(this.data[i]);
-      }
-      this.setState({ ...this.state, options: results });
-
+    this.timeout = setTimeout(() => { 
+      this.setState({ ...this.state, options: this.searchJson(title) });
     }, 300);
   }
+
+  listStreams(){
+    let items = this.searchJson(document.getElementById("imdb_search").value)
+    let imdbId = items[0].tconst
+    fetch(`${TPB}${imdbId}.json` , {
+      method: 'GET',
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        return data.stream
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+  }
+
 
   startStream(magnetURI) {
     var client = new WebTorrent()
@@ -71,16 +90,12 @@ class App extends Component {
     return (
       <Fragment>
         <Autocomplete
-          id="asynchronous-demo"
+          id="imdb_search"
           style={{ width: 300 }}
           open={this.state.open}
-          onOpen={() => {
-            this.setState({ ...this.state, open: true });
-          }}
-          onClose={() => {
-            this.setState({ ...this.state, open: false });
-          }}
-          getOptionSelected={(option, value) => option.originalTitle === value.originalTitle}
+          onOpen={() => {this.setState({ ...this.state, open: true });}}
+          onClose={() => {this.setState({ ...this.state, open: false });}}
+          //getOptionSelected={(option, value) => option.originalTitle === value.originalTitle}
           getOptionLabel={option => option.originalTitle}
           options={this.state.options}
           renderInput={params => (
@@ -94,7 +109,7 @@ class App extends Component {
               }}
             />
           )}
-        />
+        /><Button variant="contained" onClick={this.listStreams}>Search Available streams</Button>
       </Fragment>
     );
   }
