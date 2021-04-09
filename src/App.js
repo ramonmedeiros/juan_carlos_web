@@ -1,13 +1,51 @@
 import './App.css';
 import { Component, Fragment } from 'react';
-import { Button } from "react-bootstrap";
 import WebTorrent from 'webtorrent';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 //const TPB = "https://thepiratebay-plus.strem.fun/manifest.json"
 // download files and read it 
-// https://www.imdb.com/interfaces/
+const IMDB = "http://www.omdbapi.com/?apikey=e9843e26&page=100&s="
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.props = props
+    this.state = {
+      open: false,
+      options: [],
+    }
+    this.loading = this.state.open && this.options.length === 0;
+    this.searchTitle = this.searchTitle.bind(this);
+  }
+
+  componentDidUpdate() {
+  }
+
+  searchTitle(event) {
+    let title = event.target.value
+    if (this.timeout) clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      fetch(IMDB + encodeURIComponent(title), {
+        method: 'GET',
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if (data.Response === "False"){
+            return
+          } 
+          console.log(data.Search)
+          this.setState({ ...this.state, options: data.Search });
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }, 300);
+  }
 
   startStream(magnetURI) {
     var client = new WebTorrent()
@@ -25,15 +63,42 @@ class App extends Component {
   }
 
   render() {
+
     return (
-      <Fragment>
-        <h1>Search movie</h1>
-        <input type="text" id="search"></input>
-        <Button block bssize="large" type="submit">
-          Search sources
-        </Button>
-        <div id="player"></div>
-      </Fragment>
+      <Autocomplete
+        id="asynchronous-demo"
+        style={{ width: 300 }}
+        open={this.state.open}
+        onOpen={() => {
+          this.setState({ ...this.state, open: true });
+        }}
+        onClose={() => {
+          this.setState({ ...this.state, open: false });
+        }}
+        getOptionSelected={(option, value) => option.Title === value.Title}
+        getOptionLabel={option => option.Title}
+        options={this.state.options}
+        loading={this.loading}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="IMDB database search"
+            variant="outlined"
+            onChange={ev => {this.searchTitle(ev)}}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <Fragment>
+                  {this.loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </Fragment>
+              )
+            }}
+          />
+        )}
+      />
     );
   }
 }
