@@ -14,5 +14,10 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
 
+    - name: Set github name
+      run: |
+        git config --local user.email "ramon@ramonmedeiros.dev"
+        git config --local user.name "Ramon Medeiros"
+
     - run: npm install
     - run: npm run deploy
