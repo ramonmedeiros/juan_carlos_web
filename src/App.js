@@ -3,11 +3,9 @@ import { Component, Fragment } from 'react';
 import WebTorrent from 'webtorrent';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 //const TPB = "https://thepiratebay-plus.strem.fun/manifest.json"
 // download files and read it 
-const IMDB = "http://www.omdbapi.com/?apikey=e9843e26&page=100&s="
 
 class App extends Component {
 
@@ -18,8 +16,22 @@ class App extends Component {
       open: false,
       options: [],
     }
-    this.loading = this.state.open && this.options.length === 0;
     this.searchTitle = this.searchTitle.bind(this);
+    this.data = []
+    this.fetchList()
+  }
+
+  fetchList() {
+    fetch(`${window.location.href}/movies.json`, {
+      method: 'GET',
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.data = data
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 
   componentDidUpdate() {
@@ -29,21 +41,13 @@ class App extends Component {
     let title = event.target.value
     if (this.timeout) clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
-      fetch(IMDB + encodeURIComponent(title), {
-        method: 'GET',
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-          if (data.Response === "False"){
-            return
-          } 
-          console.log(data.Search)
-          this.setState({ ...this.state, options: data.Search });
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+      let results = []
+      for (var i = 0; i < this.data.length; i++) {
+        if (this.data[i]["originalTitle"].includes(title))
+          results.push(this.data[i]);
+      }
+      this.setState({ ...this.state, options: results });
+
     }, 300);
   }
 
@@ -65,40 +69,33 @@ class App extends Component {
   render() {
 
     return (
-      <Autocomplete
-        id="asynchronous-demo"
-        style={{ width: 300 }}
-        open={this.state.open}
-        onOpen={() => {
-          this.setState({ ...this.state, open: true });
-        }}
-        onClose={() => {
-          this.setState({ ...this.state, open: false });
-        }}
-        getOptionSelected={(option, value) => option.Title === value.Title}
-        getOptionLabel={option => option.Title}
-        options={this.state.options}
-        loading={this.loading}
-        renderInput={params => (
-          <TextField
-            {...params}
-            label="IMDB database search"
-            variant="outlined"
-            onChange={ev => {this.searchTitle(ev)}}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <Fragment>
-                  {this.loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </Fragment>
-              )
-            }}
-          />
-        )}
-      />
+      <Fragment>
+        <Autocomplete
+          id="asynchronous-demo"
+          style={{ width: 300 }}
+          open={this.state.open}
+          onOpen={() => {
+            this.setState({ ...this.state, open: true });
+          }}
+          onClose={() => {
+            this.setState({ ...this.state, open: false });
+          }}
+          getOptionSelected={(option, value) => option.originalTitle === value.originalTitle}
+          getOptionLabel={option => option.originalTitle}
+          options={this.state.options}
+          renderInput={params => (
+            <TextField
+              {...params}
+              label="IMDB database search"
+              variant="outlined"
+              onChange={ev => { this.searchTitle(ev) }}
+              InputProps={{
+                ...params.InputProps,
+              }}
+            />
+          )}
+        />
+      </Fragment>
     );
   }
 }
