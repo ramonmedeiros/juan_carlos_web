@@ -80,9 +80,12 @@ class StreamList extends Component {
 	generateList(streams) {
 		const items = []
 		for (let stream of streams) {
+			let movie = stream.filename
+			if (movie === undefined)
+				movie = document.getElementById("imdb_search").value
 			items.push(<Fragment key={stream.infoHash}>
 				<ListItem button>
-					<ListItemText primary={stream.filename} infohash={stream.infoHash} onClick={this.startStream} />
+					<ListItemText primary={movie} infohash={stream.infoHash} onClick={this.startStream} />
 				</ListItem>
 				<Divider />
 			</Fragment>)
