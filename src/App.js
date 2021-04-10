@@ -42,6 +42,9 @@ class App extends Component {
     this.searchTitle = this.searchTitle.bind(this);
     this.listStreams = this.listStreams.bind(this)
     this.data = []
+  }
+
+  componentDidMount() {
     this.fetchList()
   }
 

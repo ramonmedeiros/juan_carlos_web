@@ -5,32 +5,54 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
-const TPB = "https://thepiratebay-plus.strem.fun/stream/movie/"
+const JuanCarlos = "http://juan.best4stremio.space/stremioget/stremio/v1/q.json?b="
 
 class StreamList extends Component {
 
 	constructor(props) {
 		super(props)
+		this.props = props
 		this.imdbId = props.imdbId
 		this.state = { streams: [] }
 		this.startStream = this.startStream.bind(this)
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this.listStreams()
 	}
 
+	buildQuery() {
+		let params = {
+			"params": [
+				null,
+				{
+					"query": {
+						"imdb_id": this.imdbId,
+						"type": "movie",
+						"video_id": this.imdbId
+					}
+				}
+			],
+			"method": "stream.find",
+			"id": 1,
+			"jsonrpc": "2.0"
+		}
+
+		return btoa(JSON.stringify(params))
+	}
+
 	listStreams() {
-		fetch(`${TPB}${this.imdbId}.json`, {
+		fetch(`${JuanCarlos}${this.buildQuery()}`, {
 			method: 'GET',
 		})
 			.then(response => {
 				if (!response.ok) {
 					throw Error(response.statusText);
 				}
-				return response.json()})
+				return response.json()
+			})
 			.then(data => {
-				this.generateList(data.streams)
+				this.generateList(data.result)
 			})
 			.catch((error) => {
 				console.error('Error:', error);
@@ -40,7 +62,7 @@ class StreamList extends Component {
 	startStream(event) {
 		let magnetURI = event.target.parentElement.attributes.infohash.value
 		var client = new WebTorrent()
-		
+
 		client.add(magnetURI, function (torrent) {
 			// Torrents can contain many files. Let's use the .mp4 file
 			debugger;
@@ -58,9 +80,9 @@ class StreamList extends Component {
 	generateList(streams) {
 		const items = []
 		for (let stream of streams) {
-			items.push(<Fragment>
-				<ListItem button key={stream.infoHash}>
-					<ListItemText key={stream.infoHash}	primary={stream.title} infohash={stream.infoHash} onClick={this.startStream} />
+			items.push(<Fragment key={stream.infoHash}>
+				<ListItem button>
+					<ListItemText primary={stream.filename} infohash={stream.infoHash} onClick={this.startStream} />
 				</ListItem>
 				<Divider />
 			</Fragment>)
