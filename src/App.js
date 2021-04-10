@@ -77,7 +77,7 @@ class App extends Component {
   listStreams() {
     let items = this.searchJson(document.getElementById("imdb_search").value)
     let imdbId = items[0].tconst
-    this.setState({ ...this.state, streamList: <StreamList imdbId={imdbId} /> })
+    this.setState({ ...this.state, streamList: <StreamList key={imdbId} imdbId={imdbId} /> })
   }
 
   render() {
@@ -92,7 +92,7 @@ class App extends Component {
         </Typography>
           <Autocomplete
             id="imdb_search"
-            style={{ width: 300 }}
+            style={{ width: 500 }}
             open={this.state.open}
             onOpen={() => { this.setState({ ...this.state, open: true }); }}
             onClose={() => { this.setState({ ...this.state, open: false }); }}
