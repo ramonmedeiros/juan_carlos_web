@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
-const JuanCarlos = "http://juan.best4stremio.space/stremioget/stremio/v1/q.json?b="
+const JuanCarlos = "https://juan.best4stremio.space/stremioget/stremio/v1/q.json?b="
 
 class StreamList extends Component {
 
