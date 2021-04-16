@@ -1,5 +1,4 @@
 import { Component, Fragment } from 'react';
-import WebTorrent from 'webtorrent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -13,8 +12,16 @@ class StreamList extends Component {
 		super(props)
 		this.props = props
 		this.imdbId = props.imdbId
-		this.state = { streams: [] }
-		this.startStream = this.startStream.bind(this)
+		this.state = {
+			torrentInfoHash: "",
+			torrentMagnetURI: "",
+			torrentName: "",
+			torrentProgress: "",
+			torrentFiles: [],
+			mp4file: {},
+			streams: []
+		}
+		this.watch = this.watch.bind(this)
 	}
 
 	componentDidMount() {
@@ -59,38 +66,29 @@ class StreamList extends Component {
 			});
 	}
 
-	startStream(event) {
-		let magnetURI = event.target.parentElement.attributes.infohash.value
-		var client = new WebTorrent()
-
-		client.add(magnetURI, function (torrent) {
-			// Torrents can contain many files. Let's use the .mp4 file
-			debugger;
-			console.log(torrent.files)
-			var file = torrent.files.find(function (file) {
-				return file.name.endsWith('.mp4')
-			})
-
-			// Display the file by adding it to the DOM.
-			// Supports video, audio, image files, and more!
-			file.appendTo('body')
-		})
-	}
-
 	generateList(streams) {
+		function ListItemLink(props) {
+			return <ListItem button component="a" {...props} />;
+		  }
+		  
 		const items = []
 		for (let stream of streams) {
 			let movie = stream.filename
 			if (movie === undefined)
 				movie = document.getElementById("imdb_search").value
+			let link = `${window.location.href}/watch/${stream.infoHash}`
 			items.push(<Fragment key={stream.infoHash}>
-				<ListItem button>
-					<ListItemText primary={movie} infohash={stream.infoHash} onClick={this.startStream} />
-				</ListItem>
+				<ListItemLink button href={link}>
+					<ListItemText primary={movie} infohash={stream.infoHash} />
+				</ListItemLink>
 				<Divider />
 			</Fragment>)
 		}
 		this.setState({ ...this.state, streams: items })
+	}
+
+	watch (link){
+		window.location.href=link
 	}
 
 	render() {
