@@ -12,14 +12,6 @@ class Watch extends Component {
         }
     }
 
-    componentDidMount() {
-        const script = document.createElement("script");
-        script.src = "https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js";
-        script.async = true;
-        script.onload = () => this.scriptLoaded();
-        document.body.appendChild(script);
-    }
-
     scriptLoaded() {
         this.startStream()
     }
