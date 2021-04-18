@@ -7,17 +7,14 @@ class Watch extends Component {
     constructor(props) {
         super(props)
         this.infoHash = props.match.params.id
-        this.loading = []
     }
 
     componentDidMount() {
         this.startStream()
-        this.loading = <CircularProgress />
     }
 
     startStream() {
         var client = new window.WebTorrent()
-
         client.add(this.generateMagnetLink(this.infoHash), (torrent) => {
   
             var file = torrent.files.find(function (file) {
@@ -25,11 +22,8 @@ class Watch extends Component {
             })
 
             file.appendTo('#player', function (err, elem) {
-                if (err) throw err // file failed to download or display in the DOM
-                this.loading=[]
-                console.log('New DOM node with the content', elem)
+                document.getElementById("progress").remove()
               })
-
         })
     }
 
@@ -41,7 +35,7 @@ class Watch extends Component {
         return (
             <React.Fragment>
                 <div id="player">
-                    {this.loading}
+                    <CircularProgress id="progress" />
                 </div>
             </React.Fragment>)
     }
