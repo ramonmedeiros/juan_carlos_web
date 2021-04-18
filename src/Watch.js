@@ -38,7 +38,7 @@ class Watch extends Component {
             <React.Fragment>
                     <CircularProgress id="progress" />
                     <br />
-                    <video controls id="player"></video>
+                    <video controls id="player" width="100%"></video>
             </React.Fragment>)
     }
 }
