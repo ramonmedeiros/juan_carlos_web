@@ -19,6 +19,7 @@ class App extends Component {
     this.searchTitle = this.searchTitle.bind(this);
     this.listStreams = this.listStreams.bind(this)
     this.data = []
+    this.url = window.location.origin + window.location.pathname
   }
 
   componentDidMount() {
@@ -26,7 +27,7 @@ class App extends Component {
   }
 
   fetchList() {
-    fetch(`${window.location.href}/movies.json`, {
+    fetch(`${this.url}/movies.json`, {
       method: 'GET',
     })
       .then(response => response.json())

@@ -6,7 +6,7 @@ import App from './App';
 import Watch from './Watch';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { BrowserRouter as Router, Switch, Route, } from "react-router-dom";
+import { HashRouter as Router, Switch, Route, } from "react-router-dom";
 
 
 const styles = theme => ({
@@ -41,7 +41,7 @@ class Home extends Component {
                         <Typography variant="h2" component="h1" gutterBottom>
                             WebStremio
                     </Typography>
-                        <Router basename={process.env.PUBLIC_URL}>
+                        <Router >
                             <Switch>
                                 <Route exact path="/">
                                     <App />
