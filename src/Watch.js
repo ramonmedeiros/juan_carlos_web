@@ -22,7 +22,7 @@ class Watch extends Component {
                 return file.name.endsWith('.mp4')
             })
 
-            file.appendTo('body')
+            file.appendTo('player')
 
             torrent.on('download', function (bytes) {
                 console.log('just downloaded: ' + bytes)
