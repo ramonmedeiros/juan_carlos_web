@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class Watch extends Component {
 
     constructor(props) {
         super(props)
         this.infoHash = props.match.params.id
+        this.loading = []
     }
 
     componentDidMount() {
         this.startStream()
+        this.loading = <CircularProgress />
     }
 
     startStream() {
         var client = new window.WebTorrent()
 
         client.add(this.generateMagnetLink(this.infoHash), (torrent) => {
-            console.log("AAAAAAAAAA")
-            console.log(torrent.files)
+  
             var file = torrent.files.find(function (file) {
                 return file.name.endsWith('.mp4')
             })
 
-            file.appendTo('#player')
-
-            torrent.on('download', function (bytes) {
-                console.log('just downloaded: ' + bytes)
-                console.log('total downloaded: ' + torrent.downloaded)
-                console.log('download speed: ' + torrent.downloadSpeed)
-                console.log('progress: ' + torrent.progress)
-            })
+            file.appendTo('#player', function (err, elem) {
+                if (err) throw err // file failed to download or display in the DOM
+                this.loading=[]
+                console.log('New DOM node with the content', elem)
+              })
 
         })
     }
@@ -41,7 +40,9 @@ class Watch extends Component {
     render() {
         return (
             <React.Fragment>
-                <div id="player"></div>
+                <div id="player">
+                    {this.loading}
+                </div>
             </React.Fragment>)
     }
 }

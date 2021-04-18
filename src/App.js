@@ -67,7 +67,7 @@ class App extends Component {
       <Fragment>
         <Autocomplete
           id="imdb_search"
-          style={{ width: 500 }}
+          style={{ width: 100% }}
           open={this.state.open}
           onOpen={() => { this.setState({ ...this.state, open: true }); }}
           onClose={() => { this.setState({ ...this.state, open: false }); }}
