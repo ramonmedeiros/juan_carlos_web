@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/juan_carlos_web/static/js/main.2698f583.chunk.js",
-    "main.js.map": "/juan_carlos_web/static/js/main.2698f583.chunk.js.map",
+    "main.js": "/juan_carlos_web/static/js/main.ea2baec7.chunk.js",
+    "main.js.map": "/juan_carlos_web/static/js/main.ea2baec7.chunk.js.map",
     "runtime-main.js": "/juan_carlos_web/static/js/runtime-main.46ed0070.js",
     "runtime-main.js.map": "/juan_carlos_web/static/js/runtime-main.46ed0070.js.map",
-    "static/js/2.2dd1697a.chunk.js": "/juan_carlos_web/static/js/2.2dd1697a.chunk.js",
-    "static/js/2.2dd1697a.chunk.js.map": "/juan_carlos_web/static/js/2.2dd1697a.chunk.js.map",
+    "static/js/2.cbc53939.chunk.js": "/juan_carlos_web/static/js/2.cbc53939.chunk.js",
+    "static/js/2.cbc53939.chunk.js.map": "/juan_carlos_web/static/js/2.cbc53939.chunk.js.map",
     "static/js/3.35a4ebc6.chunk.js": "/juan_carlos_web/static/js/3.35a4ebc6.chunk.js",
     "static/js/3.35a4ebc6.chunk.js.map": "/juan_carlos_web/static/js/3.35a4ebc6.chunk.js.map",
     "index.html": "/juan_carlos_web/index.html",
-    "static/js/2.2dd1697a.chunk.js.LICENSE.txt": "/juan_carlos_web/static/js/2.2dd1697a.chunk.js.LICENSE.txt"
+    "static/js/2.cbc53939.chunk.js.LICENSE.txt": "/juan_carlos_web/static/js/2.cbc53939.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.46ed0070.js",
-    "static/js/2.2dd1697a.chunk.js",
-    "static/js/main.2698f583.chunk.js"
+    "static/js/2.cbc53939.chunk.js",
+    "static/js/main.ea2baec7.chunk.js"
   ]
 }
