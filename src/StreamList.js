@@ -76,7 +76,7 @@ class StreamList extends Component {
 			let movie = stream.filename
 			if (movie === undefined)
 				movie = document.getElementById("imdb_search").value
-			let link = `${window.location.href}watch/${stream.infoHash}`
+			let link = `${window.location.href}${stream.infoHash}`
 			items.push(<Fragment key={stream.infoHash}>
 				<ListItemLink button href={link}>
 					<ListItemText primary={movie} infohash={stream.infoHash} />

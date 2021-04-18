@@ -46,7 +46,7 @@ class Home extends Component {
                                 <Route exact path="/">
                                     <App />
                                 </Route>
-                                <Route path="/watch/:id">
+                                <Route path="/:id">
                                     <Watch />
                                 </Route>
                             </Switch>
