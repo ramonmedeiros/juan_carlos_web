@@ -21,8 +21,10 @@ class Watch extends Component {
                 return file.name.endsWith('.mp4')
             })
 
-            file.appendTo('#player', function (err, elem) {
+            file.getBlobURL(function (err, url) {
+                if (err) throw err
                 document.getElementById("progress").remove()
+                document.getElementById("player").src = url
               })
         })
     }
@@ -34,9 +36,9 @@ class Watch extends Component {
     render() {
         return (
             <React.Fragment>
-                <div id="player">
                     <CircularProgress id="progress" />
-                </div>
+                    <br />
+                    <video controls id="player"></video>
             </React.Fragment>)
     }
 }
