@@ -49,6 +49,7 @@ class App extends Component {
 
   searchTitle(event) {
     let title = event.target.value
+    if (title.length < 3) return
     if (this.timeout) clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       this.setState({ ...this.state, options: this.searchJson(title) });

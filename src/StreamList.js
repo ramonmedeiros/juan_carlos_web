@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
 const JuanCarlos = "https://juan.best4stremio.space/stremioget/stremio/v1/q.json?b="
+const TPB = "https://thepiratebay-plus.strem.fun/stream/movie/"
 
 class StreamList extends Component {
 
@@ -49,6 +50,36 @@ class StreamList extends Component {
 	}
 
 	listStreams() {
+		this.getJuanCarlos()
+		this.getThePirateBay()
+	}
+
+	getThePirateBay() {
+		fetch(`${TPB}${this.imdbId}.json`, {
+			method: 'GET',
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw Error(response.statusText);
+				}
+				return response.json()
+			})
+			.then(data => {
+				let streams = data.streams
+
+				// keep compatibility with Juan Carlos json format
+				for (let stream of streams) {
+					stream.filename = stream.title
+					delete stream.title
+				}
+				this.appendToList(streams);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+	}
+
+	getJuanCarlos() {
 		fetch(`${JuanCarlos}${this.buildQuery()}`, {
 			method: 'GET',
 		})
@@ -59,18 +90,19 @@ class StreamList extends Component {
 				return response.json()
 			})
 			.then(data => {
-				this.generateList(data.result)
+				if (data.result != null )
+					this.appendToList(data.result);
 			})
 			.catch((error) => {
 				console.error('Error:', error);
 			});
 	}
 
-	generateList(streams) {
+	appendToList(streams) {
 		function ListItemLink(props) {
 			return <ListItem button component="a" {...props} />;
-		  }
-		  
+		}
+
 		const items = []
 		for (let stream of streams) {
 			let movie = stream.filename
@@ -84,11 +116,11 @@ class StreamList extends Component {
 				<Divider />
 			</Fragment>)
 		}
-		this.setState({ ...this.state, streams: items })
+		this.setState({ ...this.state, streams: this.state.streams.concat(items) })
 	}
 
-	watch (link){
-		window.location.href=link
+	watch(link) {
+		window.location.href = link
 	}
 
 	render() {
