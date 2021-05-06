@@ -1,5 +1,8 @@
 # Juan Carlos's web
 
-Goal: Consume Juan Carlos addon and stream videos from web without the need for Stremio
+Use [Stremio](http://juan.best4stremio.space/) extensions as source of information and watch in the browser
+
+Supported extensions:
 
 http://juan.best4stremio.space/
+https://thepiratebay-plus.strem.fun/
