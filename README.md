@@ -5,4 +5,5 @@ Use [Stremio](http://juan.best4stremio.space/) extensions as source of informati
 Supported extensions:
 
 http://juan.best4stremio.space/
+
 https://thepiratebay-plus.strem.fun/
