@@ -27,6 +27,16 @@ class Watch extends Component {
                 document.getElementById("player").src = url
             })
         })
+
+        client.on('torrent', function (torrent) {
+            console.log("Metadata ready")
+        })
+        console.log(client.downloadSpeed)
+        console.log(client.uploadSpeed)
+
+        console.log(client.progress)
+        console.log(client.ratio)
+
     }
 
     generateMagnetLink(infoHash) {
